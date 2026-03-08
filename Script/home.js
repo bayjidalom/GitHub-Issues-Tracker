@@ -1,6 +1,6 @@
 console.log("Hello! This is home page")
 // console.log("Hello! This is home page")
-let activeTab= "all"
+let activeTab = "all"
 
 const api = "https://phi-lab-server.vercel.app/api/v1/lab/issues";
 
@@ -23,20 +23,20 @@ function showIssues(issues) {
     issuesContainer.innerHTML = "";
 
     // filter issue
-            let filteredIssues;
+    let filteredIssues;
 
-        if (activeTab === "all") {
+    if (activeTab === "all") {
         filteredIssues = issues;
-        } else {
-        filteredIssues = issues.filter(function(issue) {
+    } else {
+        filteredIssues = issues.filter(function (issue) {
             return issue.status === activeTab;
         });
-        }
+    }
 
     for (let issue of issues) {
         // console.log(issue)
-        const statusImg = issue.status === "open" 
-            ? "assets/Open-Status.png" 
+        const statusImg = issue.status === "open"
+            ? "assets/Open-Status.png"
             : "assets/Closed-Status.png";
 
         const issueCard = document.createElement("div");
@@ -89,8 +89,28 @@ function showIssues(issues) {
 }
 
 // tab-buttons
+
 document.querySelectorAll(".issue-tab-btn").forEach(btn => {
     btn.addEventListener("click", () => {
         console.log("btn")
-    })
-})
+        const tabButtons = document.querySelectorAll(".issue-tab-btn");
+        tabButtons.forEach(btn => {
+            btn.addEventListener("click", () => {
+                activeTab = btn.dataset.tab;
+
+                tabButtons.forEach(b => {
+                    b.classList.remove("btn-primary");
+                    b.classList.add("btn-outline");
+                });
+
+                btn.classList.remove("btn-outline");
+                btn.classList.add("btn-primary");
+
+                if (activeTab === "all") {
+                    showIssues(issuesData);
+                } else {
+                    const filtered = issuesData.filter(issue => issue.status === activeTab);
+                    showIssues(filtered);
+                }
+            })
+        })
