@@ -114,3 +114,43 @@ document.querySelectorAll(".issue-tab-btn").forEach(btn => {
                 }
             })
         })
+
+
+        // modal
+        const loadIssueDetail = async (id) => {
+            manageSpinner(true);
+            const url = `https://phi-lab-server.vercel.app/api/v1/lab/issue/${id}`
+            const res = await fetch(url);
+            const details = await res.json();
+            displayIssueDetails(details.data)
+            manageSpinner(false);
+        }
+
+        const displayIssueDetails = (issue) => {
+
+            // console.log(issue);
+            const detailsBox = document.getElementById("details-container");
+            detailsBox.innerHTML = `
+                    <div>
+                        <h1 class="font-bold text-lg">${issue.title}</h1>
+                    </div>
+                     <div class="flex gap-4 items-center">
+                    <button class="btn btn-soft rounded-full">${issue.status === "open" ? "Opened" : "Closed"}</button>
+                    <div class="flex gap-4">
+                     <p>Opened by ${issue.author}</p>
+                     <p>${new Date(issue.createdAt).toLocaleDateString()}</p>
+                     </div>
+                    </div>
+                    <div>
+                     ${issue.labels.map(label => `<button class="btn btn-soft btn-secondary rounded-full border">${label.toUpperCase()}</button>`).join(" ")}
+                    </div>
+                     <div>
+                     <p>${issue.description}</p>
+                    </div>
+        <div class="flex p-4 bg-[#F8FAFC] items-center gap-5 rounded-md">
+            <p>Assignee: <span class="font-bold">${issue.assignee}</span></p>
+            <p>Priority: <button class="btn btn-soft rounded-full">${issue.priority.charAt(0).toUpperCase() + issue.priority.slice(1)}</button></p>
+        </div>
+    `;
+            document.getElementById("issue_modal").showModal();
+        };
