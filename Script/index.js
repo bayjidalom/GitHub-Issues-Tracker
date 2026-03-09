@@ -10,7 +10,7 @@ document.getElementById("sign-btn").addEventListener("click",()=>{
 
     if(username === "admin" && password === "admin123"){
         alert("Login Successful");
-        window.location.assign("/home.html");
+        window.location.assign("home.html");
     }else{
         alert("Login Failed");
         return;
